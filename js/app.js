@@ -228,6 +228,8 @@ function initMap() {
     self.display = function() {
       google.maps.event.trigger(self.selectedPlace().marker, 'click');
       viewMap();
+      // Reset list after search
+      self.selectedPlace('');
     };
 
     /* This version works better than Ko utility method below*/
@@ -251,6 +253,7 @@ function initMap() {
         myMap.style.zIndex = "1";
         goBackBtn.style.zIndex = "1";
       });
+      // Reset input field after search
       self.query('');
     };
     
