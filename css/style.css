@@ -1,0 +1,102 @@
+html, body {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.header {
+  padding: 0;
+  margin: 0;
+}
+
+h3, h4 {
+  padding: 0 10px 10px 5px;
+  margin: 0;
+}
+
+.main {
+  display: block;
+  position: fixed;  
+  background-color: #ff8080;
+  border: 1px solid #999;
+  border-radius: 3px;
+  line-height: 20px;
+  padding: 0 0 0 5px;
+  width: 75vw;
+  height: 85vh;
+  z-index: 10;
+}
+
+button {
+  background-color: #ff8080;
+  border: 1px solid #e60000;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 0 0 0 20px;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+input:hover {
+  background-color: #ffff66;
+  width: 40vw;
+}
+
+.inLine {
+	display: inline-block;
+}
+
+.search-div {
+	padding: 0 0 10px 5px;
+  font-size: 14px;
+}
+
+.search-div > input {
+  width: 50vw;
+  font-size: 14px;
+}
+
+.interest-list {
+  /*background-color: #b3ffb3;*/
+  background-color: #ff8080;
+  font-weight: bold;
+  font-size: 14px;
+  width: 40vw;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+
+#goBackBtn {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 5px 0 0 25px;
+  cursor: pointer;
+}
+
+#map {
+  top: 40px;
+  bottom:0px;
+  left: 0px;
+  right: 0px;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: -1;
+}
+
+.hide {
+  display: none;
+}
