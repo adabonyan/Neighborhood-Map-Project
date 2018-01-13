@@ -15,15 +15,15 @@ This project employs Knockout js  to develop a one page App to make api call to 
  b. An input field to search for places in the list
 
 ### Input search field
-- User can search for a place of interest by entering the name of a place. Normally the first 3 letters will be sufficient for a search.
+- User can search for a place of interest by entering the name of a place. Normally the first 2 letters will be sufficient for a search.
 
-- When the search button is clicked, a map will be displayed showing only two markers, the user central place and the place of interest that is searched for. Marker for this place will bounce for 5 seconds.
+- A map will be displayed showing only two markers, the user central place and the place of interest that is searched for. Place marker will be displayed, bounce for 3 secs and it's infowindow will be displayed.
 
 ### Select (list) field
 - Click on a place The following will occur:
  a. Map will be displayed.
  b. Place marker will be displayed.
- c. The selected place marker will bounce for 5 secs, it's infowindow will open to display the place details.
+ c. The selected place marker will bounce for 3 secs, it's infowindow will open to display the place details.
  d. To close the infowindow, user can either click on the infowindow x (close) button on top right hand side OR click anywhere inside the map.
 
 ## User Notes 

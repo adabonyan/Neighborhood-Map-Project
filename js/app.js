@@ -231,10 +231,6 @@ function initMap() {
         if (obj !== self.selectedPlace()) {
           obj.marker.setVisible(false);
         } else {
-          obj.marker.setAnimation(google.maps.Animation.BOUNCE);
-          setTimeout(function(){
-            obj.marker.setAnimation(null);
-          }, 5000);
           google.maps.event.trigger(self.selectedPlace().marker, 'click');
         }
       });
@@ -243,58 +239,43 @@ function initMap() {
       self.selectedPlace('');
     };
 
-    // This version works better than Ko utility method below. For the given list, 3 letters is just sufficient. Hence query cen just works fine/*
-    self.search = function() {
-      if(!self.query()) {
-        window.alert("Enter minimum of three letters in the search field or select a place from the list below");
-        return;
-      }
+    // Developed for future review
+    /*search for input field string, length >=2 */
+    self.search = ko.computed(function() {
       var nu = self.query().length;
       var str = self.query().toLowerCase();
-      infowindow.close(map, marker);
-      self.placesOfInterest().forEach(function(obj) {
-        var obj_str = obj.name.slice(0, nu).toLowerCase();
-        if (obj_str !== str) {
-          obj.marker.setVisible(false);
-          infowindow.close(map, marker);
+      var x = 0;
+      // Input field has no focus
+      if(nu >= 2) {
+        infowindow.close(map, marker);
+        self.placesOfInterest().forEach(function(obj) {
+          var obj_str = obj.name.slice(0, nu).toLowerCase();
+          if (obj_str !== str) {
+            obj.marker.setVisible(false);
+          } else {
+            google.maps.event.trigger(obj.marker, 'click');
+            x += 1;
+          }          
+        });
+        if (x > 0) {
+          main.setAttribute("class", "hide");
+          myMap.style.zIndex = "1";
+          goBackBtn.style.zIndex = "1";
         } else {
-          obj.marker.setVisible(true);
-          obj.marker.setAnimation(google.maps.Animation.BOUNCE);
-          setTimeout(function(){
-            obj.marker.setAnimation(null);
-          }, 5000);
-        }
-        main.setAttribute("class", "hide");
-        myMap.style.zIndex = "1";
-        goBackBtn.style.zIndex = "1";
-      });
-      // Reset input field after search
-      self.query('');
-    };    
+          window.alert("There is no match for your input");
+          self.goBack();          
+        }        
+        // Reset input field after search
+        self.query('');
+      }      
+    });
     
-    /* This method employing Ko utility can't handle Cen. Result will be cen & Atl. Works if search is centen*/
-    /*
-    self.search = function() {
-      infowindow.close(map, marker);            
-      return ko.utils.arrayFilter(self.placesOfInterest(), function(place) {
-        var match = place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-        place.marker.setVisible(match);
-        place.marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function(){
-          place.marker.setAnimation(null);
-        }, 5000);
-        main.setAttribute("class", "hide");
-        myMap.style.zIndex = "1";
-        goBackBtn.style.zIndex = "1";
-        return match;
-      });
-    };
-    */        
     self.goBack = function() {
       self.placesOfInterest().forEach(function(obj) {
         obj.marker.setVisible(true);
       });
       infowindow.close(map, marker);
+      map.setCenter({lat: 33.764825, lng: -84.3867262});
       main.setAttribute("class", "main");
       myMap.style.zIndex = "-1";
       goBackBtn.style.zIndex = "-1";
