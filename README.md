@@ -21,10 +21,9 @@ This project employs Knockout js  to develop a one page App to make api call to 
 ### Select (list) field
 - Click on a place The following will occur:
  a. Map will be displayed.
- b. All markers will be displayed.
+ b. Place marker will be displayed.
  c. The selected place marker will bounce for 5 secs, it's infowindow will open to display the place details.
  d. To close the infowindow, user can either click on the infowindow x (close) button on top right hand side OR click anywhere inside the map.
-
 
 ## User Notes 
 - You can download this App to your device and run on `localhost` (a local server on your device). To do this follow these instructions (reference also to `github` and your `localhost`):

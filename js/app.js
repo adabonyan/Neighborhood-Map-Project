@@ -2,72 +2,65 @@
 Thanks to Andrew Roy Chen of Udacity for re-directing me to Foursquare,  stackoverflow for helping with knockout js and https://opensoul.org/2011/06/23/live-search-with-knockoutjs/ for helping out with search
 */
 
-/* -- CONSOLE ERROR EVENTS LISTENER --
+/*CONSOLE ERROR EVENTS LISTENER 
 https://www.linkedin.com/pulse/how-catch-api-key-google-maps-missing-invalid-sergey-fisun
 */
-(
-    function () {
-        var _error = console.error;
-
-        console.error = function (message) {
-            for (var i = 0; i < _errorListeners.length; i++)
-            {
-                var listener = _errorListeners[i];
-                listener.call(this, message);
-            }
-
-            return _error.apply(this, arguments);
-        };
-
-        var _errorListeners = [];
-
-        console.errorListeners = {
-            add: function (listener) {
-                if (_errorListeners.indexOf(listener) == -1)
-                    _errorListeners.push(listener);
-            },
-
-            remove: function (listener) {
-                _errorListeners.remove(listener);
-            }
-        };
+(function () {
+  var _error = console.error;
+  console.error = function (message) {
+    for (var i = 0; i < _errorListeners.length; i++)
+    {
+      var listener = _errorListeners[i];
+      listener.call(this, message);
     }
-)();
+    return _error.apply(this, arguments);
+  };
+  var _errorListeners = [];
+  console.errorListeners = {
+    add: function (listener) {
+        if (_errorListeners.indexOf(listener) == -1)
+            _errorListeners.push(listener);
+    },
+    remove: function (listener) {
+        _errorListeners.remove(listener);
+    }
+  };
+})();
 
-// -- SUBSCRIBE TO ALL CONSOLE ERROR MESSAGES --
+// SUBSCRIBE TO ALL CONSOLE ERROR MESSAGES --
 console.errorListeners.add(onConsoleError);
-
-// -- FIND OUT WHETHER THE ERROR IS GOOGLE MAP API KEY ERROR --
+// FIND OUT WHETHER THE ERROR IS GOOGLE MAP API KEY ERROR --
 function onConsoleError(errorMessage) {
-    var keyWords = ["API", "key", "Google", "Maps"];
-    var isGoogleMapsApiKeyError = false;
+  var keyWords = ["API", "key", "Google", "Maps", "Uncaught", "TypeError", "initMap", "VM", "marker", "infowindow", "Object"];
+  var isGoogleMapsApiKeyError = false;
 
-    for (var i = 0; i < keyWords.length; i++) {
-      if (!errorMessage.contains(keyWords[i], true)) {
-            return;
-      }
+  for (var i = 0; i < keyWords.length; i++) {
+    if (!errorMessage.contains(keyWords[i], true)) {
+      return;
     }
-    //googleApiKeyErrorHandler(); - here must be call of your function for your own handling api-key-error    
-  window.alert("Google Maps custom error triggered");
+  }
+  //googleApiKeyErrorHandler(); - here must be call of your function for your own handling api-key-error    
+  window.alert("Google Maps custom error triggered" + errorMessage);
 }
 
-
-// -- A COUPLE OF EXTENTION HELPERS --
-
+// -- A COUPLE OF EXTENTION HELPERS 
 Array.prototype.remove = function (item, comparer) {
-    if (this.indexOf(item) != -1) {
-        this.splice(startIndex, 1);
-    }
+  if (this.indexOf(item) != -1) {
+    this.splice(startIndex, 1);
+  }
 };
 
 String.prototype.contains = function (str, ignoreCase) {
-    if (ignoreCase)
-        return String.prototype.indexOf.call(this.toLowerCase(), str.toLowerCase()) !== -1;
-    else
-        return String.prototype.indexOf.call(this, str) !== -1;
+  if (ignoreCase) {
+    return String.prototype.indexOf.call(this.toLowerCase(), str.toLowerCase()) !== -1;
+  } else {
+    return String.prototype.indexOf.call(this, str) !== -1;
+  }
 };
 
-
+function cb() {
+  console.log("Google maps API has failed. Please try again");
+}
 
 var myPlaces = [
   {
@@ -158,7 +151,7 @@ var myMap = document.getElementById('map');
 var goBackBtn = document.getElementById('goBackBtn');
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(myMap, {
     zoom: 13,
     center: {lat: 33.764825, lng: -84.3867262}
   });
@@ -172,17 +165,19 @@ function initMap() {
   });
 
   infowindow = new google.maps.InfoWindow();
-
+  /*
   map.addListener('center_changed', function() {
     // 3 sec after the center of the map has changed, pan back to the marker
     window.setTimeout(function() {
       map.panTo(marker.getPosition());
     }, 5000);
-  });
 
+  });
+  */
   // Click on point on the map to close infowindow
   map.addListener('click', function() {
     infowindow.close(map, marker);
+    map.setCenter(marker.getPosition());
   });
 
   marker.addListener('click', function() {
@@ -200,39 +195,55 @@ function initMap() {
     obj.marker = createMarker(obj);
     var marker = obj.marker;
     google.maps.event.addListener(marker, 'click', function() {
-      var contentString = "<h3>" + obj.returnName + "</h3><p><b>Address : </b>" + obj.returnAddress + "</p><p><b>id: </b>" + obj.id + "</p><p><b>Phone: </b>" + obj.phone + "</p><p><b>Check-ins-Count: </b>" + obj.checkinsCount + "</p><p><b>Users Count: </b>" + obj.usersCount + "</p><p><b>Tip Count : </b>" + obj.tipCount + "</p>      <p><b>website: </b><a href='" + obj.url + "' target='_blank'>Visit website</a></p>";
+      var contentString = "<div class='infoWindow'><h3>" + obj.returnName + "</h3><p><b>Address : </b>" + obj.returnAddress + "</p><p><b>id: </b>" + obj.id + "</p><p><b>Phone: </b>" + obj.phone + "</p><p><b>Check-ins-Count: </b>" + obj.checkinsCount + "</p><p><b>Users Count: </b>" + obj.usersCount + "</p><p><b>Tip Count : </b>" + obj.tipCount + "</p><p><b>website: </b><a href='" + obj.url + "' target='_blank'>Visit website</a></p></div>";
       infowindow.setContent(contentString);
       infowindow.open(map, marker);
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function(){
         marker.setAnimation(null);
-      }, 2000);
+      }, 2000);      
+    });
+
+    google.maps.event.addListener(infowindow, 'closeclick', function () {
+      map.setCenter({lat: 33.764825, lng: -84.3867262}); 
     });
        
     openInfowindow = function(obj) {
       google.maps.event.trigger(obj.marker, 'click');
     };
+
     obj.marker.setMap(map);
     bounds.extend(obj.marker.position);  
   });
+  map.setCenter({lat: 33.764825, lng: -84.3867262});
   map.fitBounds(bounds);
-  viewMap();  
+  viewMap();
 
   var VM = function() {
     self = this;
     self.placesOfInterest = ko.observableArray(myPlaces);
     self.selectedPlace = ko.observable();
-    self.query = ko.observable();
+    self.query = ko.observable('');
     self.selectedPlace = ko.observable();
 
     self.display = function() {
-      google.maps.event.trigger(self.selectedPlace().marker, 'click');
+      self.placesOfInterest().forEach(function(obj) {
+        if (obj !== self.selectedPlace()) {
+          obj.marker.setVisible(false);
+        } else {
+          obj.marker.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout(function(){
+            obj.marker.setAnimation(null);
+          }, 5000);
+          google.maps.event.trigger(self.selectedPlace().marker, 'click');
+        }
+      });
       viewMap();
       // Reset list after search
       self.selectedPlace('');
     };
 
-    /* This version works better than Ko utility method below*/
+    // This version works better than Ko utility method below. For the given list, 3 letters is just sufficient. Hence query cen just works fine/*
     self.search = function() {
       if(!self.query()) {
         window.alert("Enter minimum of three letters in the search field or select a place from the list below");
@@ -248,6 +259,10 @@ function initMap() {
           infowindow.close(map, marker);
         } else {
           obj.marker.setVisible(true);
+          obj.marker.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout(function(){
+            obj.marker.setAnimation(null);
+          }, 5000);
         }
         main.setAttribute("class", "hide");
         myMap.style.zIndex = "1";
@@ -255,26 +270,26 @@ function initMap() {
       });
       // Reset input field after search
       self.query('');
-    };
+    };    
     
-    /* This method employing Ko utility can't differentiate bw Cen & Atl thus bringing out these markers while the search input is just Cen */
+    /* This method employing Ko utility can't handle Cen. Result will be cen & Atl. Works if search is centen*/
     /*
     self.search = function() {
       infowindow.close(map, marker);            
       return ko.utils.arrayFilter(self.placesOfInterest(), function(place) {
         var match = place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
         place.marker.setVisible(match);
-        marker.setAnimation(google.maps.Animation.BOUNCE);
+        place.marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function(){
-          marker.setAnimation(null);
+          place.marker.setAnimation(null);
         }, 5000);
         main.setAttribute("class", "hide");
         myMap.style.zIndex = "1";
         goBackBtn.style.zIndex = "1";
         return match;
-      });      
-    };*/
-    
+      });
+    };
+    */        
     self.goBack = function() {
       self.placesOfInterest().forEach(function(obj) {
         obj.marker.setVisible(true);
@@ -298,7 +313,7 @@ function callFourSquare(obj) {
       dataType: 'jsonp',
       success: function(data) {
         var returnName = data.response.venues[0].name;
-        var id = data.response.venues[0].id;
+        var id = data.response.venues[0].id;  //Keep for future photo api
         var formattedAddress = data.response.venues[0].location.formattedAddress;
         var returnAddress = formattedAddress[0] + ' ' + formattedAddress[1] + ' ' + formattedAddress[2];        
         var phone = data.response.venues[0].contact.phone;

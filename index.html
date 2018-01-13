@@ -19,9 +19,10 @@
 
       <div class="search-div">
         <input class="inLine" placeholder="Enter first 2 to 3 letters" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+     
         <button class="inLine" data-bind='click: search'>Search</button>
       </div>
-
+    
       <div>
         <b>Places of interest are:-</b>
         <br>
@@ -31,12 +32,12 @@
           value: selectedPlace">
         </select>
       </div>
+  
     </div>
 
     <div>
       <button id="goBackBtn" data-bind='click: goBack'>Menu</button>
     </div>
-
 
     <div id="map"></div>
 
