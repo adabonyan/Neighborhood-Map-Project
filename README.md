@@ -8,6 +8,7 @@ This project employs Knockout js  to develop a one page App to make api call to 
 
 - Click on any marker to get place detail as available on FourSquare. 
 - Note that the information available in FourSquare is not as comprehensive as google place (photo, panorama, etc. can only be obtained by special request. see `console.log(data.response.venue)`)
+- User can zoom the map using the zoom slider on botton right of the map
 
 - A click on the Menu button will display the home page which has:
  a. Places of interest as a drop down selection list.
