@@ -11,33 +11,26 @@
   </head>
 
   <body>
-    <div id="main" class="hide">
-      <div class="header">
+    <main id="main" class="hide">
+      <header class="header">
         <h3 class="inLine">Neighborhood Map</h3>
-        <button onclick="viewMap()">View Map</button>
-      </div>
+        <button class="mapBtn" onclick="viewMap()">View Map</button>
+      </header>
 
-      <div class="search-div">
+      <section class="search-div">
         <input id="entry" class="inLine" placeholder="Enter first 2 to 3 letters" type="search" data-bind="textInput: query">
-      </div>
+      </section>
     
-      <div>
+      <section>
         <b>Places of interest are:-</b>
-        <br>
-        <select class="interest-list" size= 10 data-bind=" click: display,
-          options: placesOfInterest,
-          optionsText: 'name',
-          value: selectedPlace">
-        </select>
-      </div>
-  
-    </div>
+        <ul data-bind="foreach: search">
+          <li data-bind="text: name, click: $parent.display"></li>
+        </ul>
+      </section>  
+    </main>
 
-    <div>
-      <button id="goBackBtn" data-bind='click: goBack'>Menu</button>
-    </div>
-
-    <div id="map"></div>
+    <button id="goBackBtn" data-bind='click: goBack'>Menu</button>
+    <map id="map"></map>
 
     <script src="js/app.js"></script>
     <script src="js/lib/jquery-3.2.1.min.js"></script>

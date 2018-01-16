@@ -39,8 +39,8 @@ function onConsoleError(errorMessage) {
       return;
     }
   }
-  //googleApiKeyErrorHandler(); - here must be call of your function for your own handling api-key-error    
-  window.alert("Google Maps custom error triggered" + errorMessage);
+  //google map api error handler  
+  alert("Google Maps custom error triggered" + errorMessage);
 }
 
 // -- A COUPLE OF EXTENTION HELPERS 
@@ -59,7 +59,7 @@ String.prototype.contains = function (str, ignoreCase) {
 };
 
 function cb() {
-  console.log("Google maps API has failed. Please try again");
+  alert("Google maps API has failed. Please try again");
 }
 
 var myPlaces = [
@@ -164,16 +164,7 @@ function initMap() {
     title: "Cooling my head here"
   });
 
-  infowindow = new google.maps.InfoWindow();
-  /*
-  map.addListener('center_changed', function() {
-    // 3 sec after the center of the map has changed, pan back to the marker
-    window.setTimeout(function() {
-      map.panTo(marker.getPosition());
-    }, 5000);
-
-  });
-  */
+  infowindow = new google.maps.InfoWindow();  
   // Click on point on the map to close infowindow
   map.addListener('click', function() {
     infowindow.close(map, marker);
@@ -195,7 +186,7 @@ function initMap() {
     obj.marker = createMarker(obj);
     var marker = obj.marker;
     google.maps.event.addListener(marker, 'click', function() {
-      var contentString = "<div class='infoWindow'><h3>" + obj.returnName + "</h3><p><b>Address : </b>" + obj.returnAddress + "</p><p><b>id: </b>" + obj.id + "</p><p><b>Phone: </b>" + obj.phone + "</p><p><b>Check-ins-Count: </b>" + obj.checkinsCount + "</p><p><b>Users Count: </b>" + obj.usersCount + "</p><p><b>Tip Count : </b>" + obj.tipCount + "</p><p><b>website: </b><a href='" + obj.url + "' target='_blank'>Visit website</a></p></div>";
+      var contentString = "<div class='infoWindow'><h2>" + obj.returnName + "</h2><p><b>Address : </b>" + obj.returnAddress + "</p><p><b>id: </b>" + obj.id + "</p><p><b>Phone: </b>" + obj.phone + "</p><p><b>Check-ins-Count: </b>" + obj.checkinsCount + "</p><p><b>Users Count: </b>" + obj.usersCount + "</p><p><b>Tip Count : </b>" + obj.tipCount + "</p><p><b>website: </b><a href='" + obj.url + "' target='_blank'>Visit website</a></p></div>";
       infowindow.setContent(contentString);
       infowindow.open(map, marker);
       marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -222,58 +213,26 @@ function initMap() {
   var VM = function() {
     self = this;
     self.placesOfInterest = ko.observableArray(myPlaces);
-    self.selectedPlace = ko.observable();
     self.query = ko.observable('');
-    self.selectedPlace = ko.observable();
 
-    self.display = function() {
-      self.placesOfInterest().forEach(function(obj) {
-        if (obj !== self.selectedPlace()) {
-          obj.marker.setVisible(false);
-        } else {
-          google.maps.event.trigger(self.selectedPlace().marker, 'click');
-        }
-      });
+    self.display = function(place) {
       viewMap();
-      // Reset list after search
-      self.selectedPlace('');
+      google.maps.event.trigger(place.marker, 'click');
     };
 
-    // Developed for future review
-    /*search for input field string, length >=2 */
     self.search = ko.computed(function() {
-      var nu = self.query().length;
-      var str = self.query().toLowerCase();
-      var x = 0;
-      // Input field has no focus
-      if(nu >= 2) {
-        infowindow.close(map, marker);
-        self.placesOfInterest().forEach(function(obj) {
-          var obj_str = obj.name.slice(0, nu).toLowerCase();
-          if (obj_str !== str) {
-            obj.marker.setVisible(false);
-          } else {
-            google.maps.event.trigger(obj.marker, 'click');
-            x += 1;
-          }          
-        });
-        if (x > 0) {
-          main.setAttribute("class", "hide");
-          myMap.style.zIndex = "1";
-          goBackBtn.style.zIndex = "1";
-        } else {
-          window.alert("There is no match for your input");
-          self.goBack();          
-        }        
-        // Reset input field after search
-        self.query('');
-      }      
+      return ko.utils.arrayFilter(self.placesOfInterest(), function(place) {
+        var match = place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+        place.marker.setVisible(match);
+        return match;
+      });
     });
     
     self.goBack = function() {
       self.placesOfInterest().forEach(function(obj) {
         obj.marker.setVisible(true);
       });
+      self.query('');
       infowindow.close(map, marker);
       map.setCenter({lat: 33.764825, lng: -84.3867262});
       main.setAttribute("class", "main");
@@ -283,7 +242,7 @@ function initMap() {
   };
   ko.applyBindings(new VM());
 }
-//FourSqure does not release place photo, panorama even with photo/detail search
+//FourSqure does not release place photo, panorama
 function callFourSquare(obj) {
   var constant = 'https://api.foursquare.com/v2/venues/search?client_id=RATCVBUAFGTEBRLM1BZUIHWMGR42CVTXY5LMFIXJ2TBBZRWF&client_secret=Z1MF1BSANQW0JXHKZN1U5ZYYEMJR2PFCACTOE25COGF2HO05&v=20180105';
   var url = constant + '&ll=' + obj.latitude + ',' + obj.longitude + '&radius=100&query=' + obj.name + '&limit=1';
@@ -312,7 +271,7 @@ function callFourSquare(obj) {
         obj.usersCount = usersCount;
       },
       error: function(err) {
-        window.alert("There was error calling Foursquare API");
+        alert("There was error calling Foursquare API");
         return;
       }
     });
@@ -365,6 +324,4 @@ function goBack() {
   main.setAttribute("class", "main");
   myMap.style.zIndex = "-1";
   goBackBtn.style.zIndex = "-1";
-  //$('input').eq(0).val('');
-  //$('input').eq(0).attr("placeholder", "Enter first 2 to 3 letters");  
 }
