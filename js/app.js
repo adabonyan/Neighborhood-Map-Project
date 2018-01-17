@@ -181,8 +181,15 @@ function initMap() {
   marker.setMap(map);
   bounds.extend(marker.position);
 
+  var fsq_api_err = false;
+
   myPlaces.forEach(function(obj) {
     callFourSquare(obj);
+    //console.log(fsq_api_err);
+    if (fsq_api_err) {
+      alert("There was error calling Foursquare API");
+      return;
+    }
     obj.marker = createMarker(obj);
     var marker = obj.marker;
     google.maps.event.addListener(marker, 'click', function() {
@@ -245,7 +252,7 @@ function initMap() {
 //FourSqure does not release place photo, panorama
 function callFourSquare(obj) {
   var constant = 'https://api.foursquare.com/v2/venues/search?client_id=RATCVBUAFGTEBRLM1BZUIHWMGR42CVTXY5LMFIXJ2TBBZRWF&client_secret=Z1MF1BSANQW0JXHKZN1U5ZYYEMJR2PFCACTOE25COGF2HO05&v=20180105';
-  var url = constant + '&ll=' + obj.latitude + ',' + obj.longitude + '&radius=100&query=' + obj.name + '&limit=1';
+  var url = constant + '&ll=' + obj.latitude + ',' + obj.longitude + '&radius=100&query=' + obj.name + '&limit=1';  
 
   $(function() {
     $.ajax({
@@ -271,7 +278,7 @@ function callFourSquare(obj) {
         obj.usersCount = usersCount;
       },
       error: function(err) {
-        alert("There was error calling Foursquare API");
+        fsq_api_err = true;
         return;
       }
     });

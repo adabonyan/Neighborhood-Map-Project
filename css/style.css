@@ -10,7 +10,8 @@ html, body {
   margin: 0;
 }
 
-h3 {
+h1 {
+  font-size: 1.25em;
   padding: 0 10px 10px 5px;
   margin: 0;
 }

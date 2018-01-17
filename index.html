@@ -13,7 +13,7 @@
   <body>
     <main id="main" class="hide">
       <header class="header">
-        <h3 class="inLine">Neighborhood Map</h3>
+        <h1 class="inLine">Neighborhood Map</h1>
         <button class="mapBtn" onclick="viewMap()">View Map</button>
       </header>
 
@@ -32,14 +32,14 @@
     <button id="goBackBtn" data-bind='click: goBack'>Menu</button>
     <map id="map"></map>
 
-    <script src="js/app.js"></script>
-    <script src="js/lib/jquery-3.2.1.min.js"></script>
-    <script src="js/lib/knockout-3.4.2.js"></script>
-
-    <script async defer
+    <script defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkOzx2TRyW8FlDXk4IaFBzBlknmkWy5Nc&v3&callback=initMap"
     onerror="cb()">
     </script>
+    
+    <script src="js/app.js"></script>
+    <script src="js/lib/jquery-3.2.1.min.js"></script>
+    <script src="js/lib/knockout-3.4.2.js"></script>    
 
   </body>
 </html>

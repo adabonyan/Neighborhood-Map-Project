@@ -26,18 +26,20 @@ This project employs Knockout js  to develop a one page App to make api call to 
  c. The selected place marker will bounce for 3 secs, it's infowindow will open to display the place details.
  d. To close the infowindow, user can either click on the infowindow x (close) button on top right hand side OR click anywhere inside the map.
 
-## User Notes 
-- You can download this App to your device and run on `localhost` (a local server on your device). To do this follow these instructions (reference also to `github` and your `localhost`):
-- On your device, create a folder to hold the app files.
-- Go to [Link](https://github.com/adabonyan/Neighborhood-Map-Project)
-- Click `Clone in Desktop` or `Download ZIP` (green button about the middle of the page on the right hand side)
-- On your device, open the folder to view files. 
-- On your browser, open `localhost` and type in the index.html path (or follow guide on how to use your `localhost`)
-- Open `index.html` in your browser.
+## User Notes
+You can clone the repository or play the app on any device. Follow the notes below.
 
-- This site is also published at `github` [Link](https://adabonyan.github.io/Neighborhood-Map-Project/) 
+### Clone
+- To clone this repository to your device, go to [Link](https://github.com/adabonyan/Neighborhood-Map-Project)
+- Read instruction for cloning in [GitHub Help](https://help.github.com/articles/cloning-a-repository/)
+- Once you have succesfully cloned, you can run the app on a local server on your device, `localhost`. I use `XAMPP` and will briefly describe (pretty much same for all `localhost`)
+	a Start `XAMPP`, be sure both `Apache` and `MySQL` are running (on green)
+	b Open your browser, enter `localhost/folder path/` (where folder path is the new folder address without `C:/xampp/htdocs/`)
+
+### Run the app
+- The project is published and available to the public at `Github` [Link](https://adabonyan.github.io/Neighborhood-Map-Project/) 
 
 ## Future work
-- Host this App on a certified server (not github, localhost) and check FourSquare responses to venues details and photo api calls.
 - Allow user to make own request for places of interest
-- The new yelp Fusion API call is presently a challenge. There is no example of this yet. yelp does not accept neither localhost nor github for hosting. There should solution somewhere.
+- Host this App on a certified server (not github, localhost) and check FourSquare responses to venues details and photo api calls.
+- Develop new yelp Fusion API call version using javascript
